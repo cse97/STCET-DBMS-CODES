@@ -1,0 +1,31 @@
+import java.io.*;
+import java.net.*;
+public class StringServer{
+public static void main(String args[]) throws IOException{
+ServerSocket server=new ServerSocket(1500);
+while(true){
+Socket s=server.accept();
+BufferedReader br=new BufferedReader(new InputStreamReader(s.getInputStream()));
+String str=br.readLine();
+str=str.toUpperCase();
+DataOutputStream dos=new DataOutputStream(s.getOutputStream());
+dos.writeBytes(str+'\n');
+}
+}
+import java.io.*;
+import java.net.*;
+public class StringClient{
+public static void main(String args[]) throws IOException{
+Socket s=new Socket("localhost",1500);
+BufferedReader br=new BufferedReader(new InputStreamReader(System.in()));
+DataOutputStream dos=new DataOutputStream(s.getOutputStream());
+BufferedReader br2=new BufferedReader(new InputStreamReader(s.getInputStream()));
+System.out.println("Enter string:");
+String str=br.readLine();
+dos.writeBytes(str+'\n');
+String nstr=br2.readLine();
+System.out.println("Modified string:"+nstr);
+dos.close();
+s.close();
+}
+}

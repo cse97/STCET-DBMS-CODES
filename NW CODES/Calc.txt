@@ -1,0 +1,40 @@
+import java.io.*;
+import java.net.*;
+public class CalcServer{
+public static void main(String args[]) throws IOException{
+ServerSocket server=new ServerSocket(1500);
+Socket s=server.accept();
+BufferedReader br=new BufferedReader(new InputStreamReader(s.getInputStream()));
+String input=br.readLine();
+input=input+" ";
+String arr[]=input.split(" ");
+System.out.println(arr[0]+arr[1]+arr[2]);
+double result=0,n1=Double.parseDouble(arr[0]),n2=Double.parseDouble(arr[1]);
+if(arr[2].equals("+"))
+  result=n1+n2;
+else if (arr[2].equals("-"))
+  result=n1-n2;
+else if (arr[2].equals("*"))
+  result=n1*n2;
+else 
+  result=n1/n2; 
+DataOutputStream dos=new DataOutputStream(s.getOutputStream());
+dos.writeBytes(result+'\n');
+s.close();
+}
+}
+import java.io.*;
+import java.net.*;
+public class CalcClient{
+public static void main(String args[]) throws IOException,ClassNotFoundException{
+Socket s=new Socket("localhost",1500);
+BufferedReader br=new BufferedReader(new InputStreamReader(System.in()));
+DataOutputStream dos=new DataOutputStream(s.getOutputStream());
+BufferedReader br2=new BufferedReader(new InputStreamReader(s.getInputStream()));
+System.out.println("Enter no and operator with separate spaces:");
+String input=br.readLine();
+dos.writeBytes(input+'\n');
+String result=br2.readLine();
+System.out.println(result);
+}
+}
