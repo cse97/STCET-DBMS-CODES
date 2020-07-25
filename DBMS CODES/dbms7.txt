@@ -1,0 +1,43 @@
+create table EMP(
+EMPNO number(4),
+ENAME varchar2(10),
+JOB char(15),
+MGR number(4),
+HIREDATE date,
+SAL number(4),
+COMM number(4),
+DEPTNO number(4) 
+);
+insert into EMP values(7369,'AKshay','Clerk',7436,'17-May-18',100,1001,10);
+insert into EMP values(7355,'Ananya','Manager',7726,'2-June-13',5000,500,20);
+insert into EMP values(7464,'Diptasree','Salesman',7556,'1-May-81',300,1200,30);
+insert into EMP values(7423,'Emlon','Analyst',7332,'1-Jan-18',1000,8000,40);
+insert into EMP values(7366,'Rohit','President',7453,'3-May-18',1500,1100,50);
+create table DEPT(
+DEPTNO number(4),
+DNAME varchar2(4),
+LOC varchar2(10)
+);
+insert into DEPT values(10,'Acct','New York');
+insert into DEPT values(20,'Resh','Kolkata');
+insert into DEPT values(30,'Sale','Bangladesh');
+insert into DEPT values(40,'Optn','Nepal');
+insert into DEPT values(50,'Mark','Orissa');
+
+1. select ENAME from EMP where SAL=(select max(SAL) from EMP);
+2. select ENAME from EMP where SAL=(select max(SAL) from EMP where JOB like 'Salesman');
+3. select ENAME from EMP where SAL=(select min(SAL) from EMP  where JOB like 'Clerk');
+4. select DNAME from DEPT 
+where DEPTNO=(select DEPTNO from EMP having avg(SAL)=(select max(avg(SAL)) from EMP group by DEPTNO) group by DEPTNO); 
+5. select ENAME from EMP where SAL>(select SAL from EMP where ENAME='Turner');
+6. select ENAME from EMP where HIREDATE>(select HIREDATE from EMP where ENAME='Alen'); 
+7. select DNAME from DEPT where DEPTNO=(select DEPTNO from EMP where ENAME='Ford');
+8. select DNAME from DEPT where DEPTNO=(select DEPTNO from EMP where SAL=(select max(SAL) from EMP));
+9. select LOC from DEPT where DEPTNO=(select DEPTNO from EMP where ENAME='Smith');
+10. select LOC from DEPT where DEPTNO=(select DEPTNO from EMP where JOB='Manager');
+11. select EMPNO from EMP where ENAME='Martin';
+12. select * from EMP where SAL>(select max(SAL) from EMP where DEPTNO=(select DEPTNO from DEPT where LOC like 'Dallas'));
+13. select DNAME from DEPT where DEPTNO not in (select DEPTNO from EMP);
+14. select ENAME from EMP where HIREDATE=(select HIREDATE from EMP where ENAME='Adams');
+15. select distinct DNAME from DEPT where DEPTNO=(select DEPTNO from EMP where COMM is not NULL);
+16. select ENAME,DEPTNO from EMP where SAL in (select min(SAL) from EMP group by DEPTNO);

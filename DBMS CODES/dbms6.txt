@@ -1,0 +1,14 @@
+create table CUSTOMERS1(CUSTOMERID number(4), CUSTOMERNAME varchar2(50), CONTACTNAME varchar2(50),ADDRESS varchar2(50), CITY varchar2(50), POSTALCODE number(4), COUNTRY varchar2(50));
+create table SUPPLIERS2(SUPPLIERID number(4), SUPPLIERNAME varchar2(50),CONTACTNAME varchar2(50),ADDRESS varchar2(50), CITY varchar2(50), POSTALCODE number(4), COUNTRY varchar2(50));
+insert into CUSTOMERS1 values(1,'Alfreds','Maria','Obere',12209,'Germany');
+insert into CUSTOMERS1 values(2,'Ana','Ana','Adva',05021,'Mexico');
+insert into CUSTOMERS1 values(3,'Antonio','Antonio','Mataderos',05023,'Mexico');
+insert into SUPPLIERS2 values(1,'Exotic','Charlotte','49 Gilbert',12209,'Germany');
+insert into SUPPLIERS2 values(2,'New','Shelley','P.O.',05023,'Mexico');
+insert into SUPPLIERS2 values(3,'Grandma','Regina','707 Oxford',48104,'USA');
+
+1. select  distinct CITY from CUSTOMERS1 union select distinct CITY from SUPPLIERS2;
+2. select  CITY from CUSTOMERS1 union all select CITY from SUPPLIERS2;
+3. select CITY from CUSTOMERS1 where COUNTRY='Germany' union all select CITY from SUPPLIERS2 where COUNTRY='Germany';
+4. select CUSTOMERNAME,SUPPLIERNAME from CUSTOMERS1 join SUPPLIERS2 on CUSTOMERS1.CITY=SUPPLIERS2.CITY in (select CITY from CUSTOMERS1 intersect select CITY from SUPPLIERS2); 
+5.

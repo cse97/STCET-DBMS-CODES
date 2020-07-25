@@ -1,0 +1,111 @@
+create table CLIENT_MASTER1(
+CLIENT_NO varchar2(6) primary key,
+NAME varchar2(20) not null,
+CITY varchar2(15),
+PINCODE number(8),
+STATE varchar2(15),
+BAL_DUE number(10,2),
+check (CLIENT_NO like ('C%'))
+);
+create table PRODUCT_MASTER(
+PRODUCT_NO varchar2(6) primary key,
+DESCRIPTION varchar2(15) not null,
+PROFIT_PERCENT number(4,2) not null,
+UNIT_MEASURE varchar2(10) not null,
+QTY_ON_HAND number(8) not null,
+RECORDER_LVL number(8) not null,
+SELL_PRICE number(8,2) not null,
+COST_PRICE number(8,2) not null,
+check (PRODUCT_NO like ('P%')),
+check (SELL_PRICE>0),
+check (COST_PRICE>0)
+);
+create table SALESMAN_MASTER(
+SALESMAN_NO varchar2(6) primary key not null,
+SALESMAN_NAME varchar2(20) not null,
+ADDRESS1 varchar2(10) not null,
+ADDRESS2 varchar2(10),
+CITY varchar2(20),
+PINCODE number(7),
+STATE varchar2(20),
+SAL_AMT number(8,2) not null,
+TGT_TO_GET number(6,2)not null,
+YTD_SALES number(6,2) not null,
+REMARKS varchar2(20),
+check (SALESMAN_NO like ('S%')),
+check (SAL_AMT>0),
+check (TGT_TO_GET>0)
+);
+create table SALES_ORDER2(
+ORDER_NO varchar2(6) primary key,
+CLIENT_NO varchar2(6) references CLIENT_MASTER1(CLIENT_NO),
+ORDER_DATE date,
+SALESMAN_NO varchar2(6) references SALESMAN_MASTER(SALESMAN_NO),
+DELY_TYPE char(1),
+BILLED_YN char(1),
+DELY_DATE date,
+ORDER_STATUS varchar2(10),
+check (ORDER_NO like ('O%')),
+check (DELY_TYPE in('P','F')),
+check (DELY_DATE>ORDER_DATE),
+check (ORDER_STATUS in('In process','Fulfilled','Backorder','Cancelled'))
+);
+create table SALES_ORDER_DETAILS2(
+ORDER_NO varchar2(6) references SALES_ORDER2(ORDER_NO),
+PRODUCT_NO varchar2(6) references PRODUCT_MASTER(PRODUCT_NO),
+QTY_ORDERED number(8),
+QTY_DISP number(8),
+PRODUCT_RATE number(10,2)
+);
+insert into CLIENT_MASTER1 values('C00001','Ivan Bayross','Mumbai',400054,'Maharashtra',15000);
+insert into CLIENT_MASTER1 values('C00002','Mamta Mazumdar','Madras',780001,'Tamil Nadu',0);
+insert into CLIENT_MASTER1 values('C00003','Chhaya Bankar','Mumbai',400057,'Maharashtra',5000);
+insert into PRODUCT_MASTER values('P00001','T-shirts',5,'Piece',200,50,350,250);
+insert into PRODUCT_MASTER values('P0345','Shirts',6,'Piece',150,50,500,350);
+insert into PRODUCT_MASTER values('P06734','Cotton jeans',5,'Piece',100,20,600,450);
+insert into SALESMAN_MASTER values('S00001','Aman','A/14','Worli','Mumbai',400002,'Maharashtra',3000,100,50,'Good');
+insert into SALESMAN_MASTER values('S00002','Omkar','65','Nariman','Mumbai',400001,'Maharashtra',3000,200,100,'Good');
+insert into SALESMAN_MASTER values
+('S00003','Raj','P-7','Bandra','Mumbai',400032,'Maharashtra',3000,200,100,'Good');
+insert into SALES_ORDER2 values('O19001','C00001','20-Jan-02','S00001','F','N','12-Jan-04','In process');
+insert into SALES_ORDER2 values('O19002','C00002','27-June-02','S00002','P','N','25-June-04','Cancelled');
+insert into SALES_ORDER2 values('O46865','C00003','20-Feb-02','S00003','F','Y','18-Feb-04','Fulfilled');
+insert into SALES_ORDER_DETAILS2 values('O19001','P00001',4,4,525);
+insert into SALES_ORDER_DETAILS2 values('O19002','P0345',2,1,840);
+insert into SALES_ORDER_DETAILS2 values('O46865','P06734',2,1,525);
+
+
+1. select NAME from CLIENT_MASTER1 where NAME like '_a%'; 
+2. select NAME from CLIENT_MASTER1 where CITY like '_a%';
+3. select * from CLIENT_MASTER1 where (CITY like 'Bombay') or (CITY like 'Delhi');
+4. select * from CLIENT_MASTER1 where BAL_DUE>10000;
+5. select * from SALES_ORDER2 where extract(month from ORDER_DATE)=1;
+6. select * from SALES_ORDER2 where (CLIENT_NO='C00001') or (CLIENT_NO='C00002');
+7. select * from PRODUCT_MASTER where (SELL_PRICE>500 and SELL_PRICE<200);
+8. select * from PRODUCT_MASTER where SELL_PRICE>150;
+   select 0.15*SELL_PRICE "NEW_PRICE" from PRODUCT_MASTER;
+9. select NAME,CITY,STATE from CLIENT_MASTER1 where STATE <> 'Maharashtra';
+10. select count(*) from SALES_ORDER2;
+11. select avg(PRODUCT_RATE) from SALES_ORDER_DETAILS2;
+12. select max(PRODUCT_RATE) "MAX_PRICE" ,min(PRODUCT_RATE) "MIN_PRICE" from SALES_ORDER_DETAILS2;
+13. select count(*) from SALES_ORDER_DETAILS2 where PRODUCT_RATE>1500;
+14. select * from PRODUCT_MASTER where QTY_ON_HAND<RECORDER_LVL;
+15. select ORDER_NO,to_char(ORDER_DATE,'DAY') from SALES_ORDER2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

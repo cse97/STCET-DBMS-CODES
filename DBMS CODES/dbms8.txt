@@ -1,0 +1,52 @@
+create table SALESPEOPLE(
+SNUM number(4) primary key,
+SNAME varchar2(10),
+CITY varchar2(10),
+COMM number(4)
+);
+create table CUSTOMER(
+CNUM number(4) primary key,
+CNAME varchar2(10),
+CITY varchar2(10),
+RATING number(4),
+SNUM number(4) references SALESPEOPLE(SNUM)
+);
+create table ORDERS(
+ONUM number(4) primary key,
+AMT number(4),
+ODATE date,
+CNUM number(4) references CUSTOMER(CNUM),
+SNUM number(4) references SALESPEOPLE(SNUM)
+);
+insert into SALESPEOPLE values(1000,'Deep','Kolkata',1000);
+insert into SALESPEOPLE values(1001,'Deepa','Kanpur',1015);
+insert into SALESPEOPLE values(1002,'Deepika','Kerala',2000);
+insert into CUSTOMER values(2000,'Raj','Lucknow',5,1000);
+insert into CUSTOMER values(2001,'Raja','Lahore',15,1001);
+insert into CUSTOMER values(2002,'Rajlakshmi','Kolkata',50,1002);
+insert into ORDERS values(3000,1500,'12-May-18',2000,1000);
+insert into ORDERS values(3001,2500,'12-June-18',2001,1001);
+insert into ORDERS values(3002,1520,'18-May-18',2002,1002);
+1.A. create view view1A as
+     select CNAME from CUSTOMER
+     where RATING=(select max(RATING) from CUSTOMER);
+1.B. create view view1B as
+     select count(*) as SNUM,CITY from SALESPEOPLE
+     group by CITY;
+1.C. create view view1C as
+     select avg(AMT) "AVERAGE",sum(AMT) "TOTAL",SNUM from ORDERS
+     group by SNUM;
+1.D. create view view1D as
+     select SNAME from SALESPEOPLE
+     where SNUM in(select SNUM from CUSTOMER 
+                   having count(CNUM)>1
+                   group by SNUM );
+2.   create view SALESPEOPLE_CUSTOMER_ORDERS as
+     select SNAME,CNAME,ONUM from SALESPEOPLE,CUSTOMER,ORDERS
+     where SALESPEOPLE.SNUM=ORDERS.SNUM and CUSTOMER.CNUM=ORDERS.CNUM; 
+3.   create view viewSALESPEOPLE as
+     select SNUM,COMM from SALESPEOPLE
+     where COMM>=1000 and COMM<=2000 with check option;
+     insert into viewSALESPEOPLE values(304,1200);
+     insert into viewSALESPEOPLE values(351,1250);
+     update viewSALESPEOPLE set COMM=1300 where SNUM=1000;

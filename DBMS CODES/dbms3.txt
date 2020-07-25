@@ -1,0 +1,42 @@
+1. alter session set NLS_DATE_FORMAT='YYYY MM DD';
+   select SYSDATE from DUAL;
+   alter session set NLS_DATE_FORMAT='HH24 MI SS';
+   select SYSDATE from DUAL; 
+2. select 2*2 from DUAL;
+3. select abs(-15) from DUAL;
+4. select sqrt(5) from DUAL;
+5. select round (15.19,1) from DUAL;  
+6. select upper('Ivan Bayross') "UPPER" from DUAL;
+7. select lower('Ivan Bayross') "LOWER" from DUAL;
+8. select SYSDATE+ interval '5' month from DUAL;
+9. select MONTHS_BETWEEN (DATE '2001-07-02',DATE '2001-01-02') from DUAL;
+10. alter session set NLS_DATE_FORMAT='DD MM YYYY';
+    select SYSDATE from DUAL; 
+___________________________________________________________________________________________________
+
+create table EMP3(
+EMPNO number(4) primary key,
+ENAME varchar2(10), 
+MGR number(4),
+HIREDATE date,
+SAL number(5),
+COMM number(10) default 0,
+DEPT_NAME varchar2(15),
+check (EMPNO>=7000 and EMPNO<=8000),
+check (length(ENAME)<10),
+check (COMM<1500)
+);
+insert into EMP3 values(7000,'Aishani',1000,'1-Jan-80',1500,1000,'Salesman');
+insert into EMP3 values(7500,'Turner',1005,'3-June-18',200,1005,'Clerk');
+insert into EMP3 values(8000,'Ford',2000,'5-Aug-80',1001,1003,'Analyst');
+1. select ENAME from EMP3 where ENAME like '_i%';
+2. select ENAME from EMP3 where DEPT_NAME <> 'Manager';
+3. select max(SAL) "MAXIMUM", min(SAL) "MINIMUM",sum(SAL) "TOTAL",avg(SAL) "AVERAGE" from EMP3;
+4. select max(SAL) "MAXIMUM", min(SAL) "MINIMUM",sum(SAL) "TOTAL",avg(SAL) "AVERAGE" from EMP3 group by DEPT_NAME;
+5. select count(DEPT_NAME) "NUMBER OF MANAGERS" from EMP3 where DEPT_NAME='Manager';
+6. select * from EMP3 where HIREDATE='1-Jan-80';
+7. select ENAME from EMP3 where DEPT_NAME='Salesman' and SAL=(select max(SAL) from EMP3 where DEPT_NAME='Salesman');
+8. select ENAME from EMP3 where DEPT_NAME='Clerk' and SAL=(select min(SAL) from EMP3 where DEPT_NAME='Clerk');
+9. select DEPT_NAME from EMP3 where ENAME='Ford';
+10. select DEPT_NAME from EMP3 where SAL=(select max(SAL) from EMP3); 
+11. select ENAME from EMP3 where SAL>(select SAL from EMP3 where ENAME='Turner');
